@@ -1,0 +1,557 @@
+<title>Veranda Café Bistro</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: tek sütunlu proje föyü; kat planı geniş bant olarak ortada, çevresinde bölge ve malzeme kartları */
+:root {
+  --bg: #EDF0EA;          /* kireç badanalı duvar, hafif yeşil */
+  --surface: #F8F9F5;
+  --ink: #1E2A2C;
+  --muted: #56645F;
+  --line: #C6CEC3;
+  --sage: #5F7A58;        /* asma yaprağı */
+  --aegean: #2B5A70;      /* ege mavisi, vurgu */
+  --rattan: #A97B3D;      /* hasır, pirinç */
+  --plan-fill: #FBFCF9;
+  --plan-zone: #E3E9DF;
+  --plan-veranda: #DCE6D5;
+  --font-display: "Gloock", "Georgia", serif;
+  --font-body: "Karla", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131A19; --surface: #1A2321; --ink: #E4E9E2; --muted: #9AA8A1; --line: #2E3A37;
+    --sage: #94AE89; --aegean: #82B4CB; --rattan: #D2A766;
+    --plan-fill: #1C2523; --plan-zone: #24302D; --plan-veranda: #22322A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131A19; --surface: #1A2321; --ink: #E4E9E2; --muted: #9AA8A1; --line: #2E3A37;
+  --sage: #94AE89; --aegean: #82B4CB; --rattan: #D2A766;
+  --plan-fill: #1C2523; --plan-zone: #24302D; --plan-veranda: #22322A;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-block: 48px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 72px;
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.7rem, 3.4vw, 2.3rem); }
+h3 { font-size: 1.3rem; }
+p { margin: 0; max-width: 65ch; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--aegean);
+}
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+section { display: grid; gap: 24px; }
+.section-head { display: grid; gap: 8px; }
+.section-head p { color: var(--muted); }
+
+/* Hero */
+.hero { display: grid; gap: 20px; }
+.hero .lede { font-size: 1.2rem; color: var(--muted); max-width: 58ch; }
+.facts {
+  display: flex; flex-wrap: wrap; gap: 12px 32px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.facts div { display: grid; }
+.facts dt { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; font-family: var(--font-mono); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+
+/* Concept pillars */
+.pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px; }
+.pillars article { display: grid; gap: 8px; align-content: start; border-top: 2px solid var(--sage); padding-top: 14px; }
+.pillars p { color: var(--muted); }
+
+/* Plan */
+.plan-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 16px;
+  overflow-x: auto;
+}
+.plan-box svg { display: block; width: 100%; min-width: 620px; height: auto; }
+.plan-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 0.85rem; color: var(--muted); }
+.plan-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.plan-legend i { width: 14px; height: 14px; border: 1px solid var(--line); display: inline-block; }
+
+.wall { fill: none; stroke: var(--ink); stroke-width: 4; }
+.wall-thin { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+.glass { stroke: var(--aegean); stroke-width: 2; fill: none; }
+.zone { fill: var(--plan-zone); stroke: var(--ink); stroke-width: 1.5; }
+.room { fill: var(--plan-fill); }
+.veranda { fill: var(--plan-veranda); stroke: var(--sage); stroke-width: 1.5; stroke-dasharray: 6 4; }
+.beam { stroke: var(--sage); stroke-width: 1; stroke-dasharray: 2 5; opacity: 0.8; }
+.post { fill: var(--sage); }
+.furn { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
+.wood { fill: var(--rattan); fill-opacity: 0.35; stroke: var(--rattan); stroke-width: 1.2; }
+.seat { fill: var(--plan-fill); stroke: var(--muted); stroke-width: 1; }
+.planter { fill: var(--sage); fill-opacity: 0.45; stroke: var(--sage); stroke-width: 1; }
+.canopy { fill: var(--sage); fill-opacity: 0.18; stroke: var(--sage); stroke-dasharray: 3 3; }
+.counter { fill: var(--aegean); fill-opacity: 0.22; stroke: var(--aegean); stroke-width: 1.2; }
+.lbl { font-family: var(--font-mono); font-size: 11px; fill: var(--ink); }
+.lbl-sm { font-family: var(--font-mono); font-size: 9px; fill: var(--muted); }
+.key { fill: var(--aegean); }
+.key-t { font-family: var(--font-mono); font-size: 11px; font-weight: 500; fill: var(--bg); }
+.dim { stroke: var(--muted); stroke-width: 1; fill: none; }
+
+/* Zones */
+.zones { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.zone-card {
+  display: grid; gap: 10px; align-content: start;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.zone-card header { display: flex; align-items: baseline; gap: 12px; }
+.zone-card .k {
+  font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500;
+  color: var(--bg); background: var(--aegean);
+  width: 24px; height: 24px; border-radius: 50%;
+  display: inline-grid; place-items: center; flex: none;
+}
+.zone-card .meta { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+.zone-card p { color: var(--muted); font-size: 0.95rem; }
+.zone-card ul { margin: 0; padding-left: 18px; font-size: 0.92rem; display: grid; gap: 2px; }
+
+/* Materials */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+.swatch { display: grid; gap: 8px; align-content: start; }
+.chip { aspect-ratio: 4 / 3; max-width: 100%; border-radius: 4px; border: 1px solid var(--line); }
+.swatch b { font-weight: 700; font-size: 0.95rem; }
+.swatch small { color: var(--muted); font-size: 0.82rem; line-height: 1.45; }
+.swatch .mono { font-size: 0.75rem; color: var(--muted); }
+
+/* Tables */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 0.92rem; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+tr:last-child td { border-bottom: none; }
+td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tfoot td { font-weight: 700; border-top: 1px solid var(--line); }
+
+/* Two columns */
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+.split > * { min-width: 0; }
+.plants { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.plants li { display: grid; gap: 2px; border-left: 2px solid var(--sage); padding-left: 12px; }
+.plants span { color: var(--muted); font-size: 0.9rem; }
+.steps { margin: 0; padding-left: 22px; display: grid; gap: 10px; }
+.steps li::marker { font-family: var(--font-mono); color: var(--aegean); }
+.steps span { display: block; color: var(--muted); font-size: 0.9rem; }
+
+footer { color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 18px; }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">İç mimari konsept · Proje föyü</div>
+    <h1>Veranda Café Bistro</h1>
+    <p class="lede">Gündüz kahve ve kahvaltı, akşam bistro. Mekân bir Ege avlusu gibi kurgulandı: asma gölgeli veranda, katlanır cam kapılarla iç salona açılıyor ve bahçe duygusu bar tezgâhına kadar uzanıyor.</p>
+    <dl class="facts">
+      <div><dt>İç alan</dt><dd>135 m²</dd></div>
+      <div><dt>Veranda</dt><dd>75 m²</dd></div>
+      <div><dt>Toplam oturma</dt><dd>65 kişi</dd></div>
+      <div><dt>Çalışma saatleri</dt><dd>08:00–24:00</dd></div>
+    </dl>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Konsept</div>
+      <h2>Bahçe içeri taşınıyor</h2>
+    </div>
+    <div class="pillars">
+      <article>
+        <h3>Eşik yok</h3>
+        <p>Veranda ile salon arasındaki cephe 13 metre boyunca katlanır cam kapı. Yazın tamamen açılıyor, zemin kaplaması iki tarafta kesintisiz devam ediyor.</p>
+      </article>
+      <article>
+        <h3>Doğal, dokunulan malzeme</h3>
+        <p>Kireç sıva, zeytin ağacı, el yapımı çini ve hasır. Parlak yüzey yok; her şey zamanla güzelleşen, patinası olan malzemeler.</p>
+      </article>
+      <article>
+        <h3>Günün iki yüzü</h3>
+        <p>Sabah ferah ve aydınlık bir kafe; akşam dimmerlenmiş sıcak ışık ve mum ile samimi bir bistro. Aydınlatma iki sahne olarak programlandı.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Kat planı · Ölçek 1:100</div>
+      <h2>Yerleşim</h2>
+      <p>Giriş sokaktan veranda içindeki yürüyüş yolu ile, ortadaki açık cam panelden yapılıyor. Servis hattı bar ile mutfak arasında kısa tutuldu.</p>
+    </div>
+    <div class="plan-box">
+      <svg viewBox="0 0 700 660" role="img" aria-label="Veranda Café Bistro kat planı: üstte mutfak, depo, bar ve WC; ortada iç salon; altta pergola altında veranda">
+        <!-- Veranda -->
+        <rect class="veranda" x="40" y="400" width="600" height="200"/>
+        <g>
+          <line class="beam" x1="80" y1="400" x2="80" y2="600"/><line class="beam" x1="120" y1="400" x2="120" y2="600"/>
+          <line class="beam" x1="160" y1="400" x2="160" y2="600"/><line class="beam" x1="200" y1="400" x2="200" y2="600"/>
+          <line class="beam" x1="240" y1="400" x2="240" y2="600"/><line class="beam" x1="280" y1="400" x2="280" y2="600"/>
+          <line class="beam" x1="320" y1="400" x2="320" y2="600"/><line class="beam" x1="360" y1="400" x2="360" y2="600"/>
+          <line class="beam" x1="400" y1="400" x2="400" y2="600"/><line class="beam" x1="440" y1="400" x2="440" y2="600"/>
+          <line class="beam" x1="480" y1="400" x2="480" y2="600"/><line class="beam" x1="520" y1="400" x2="520" y2="600"/>
+          <line class="beam" x1="560" y1="400" x2="560" y2="600"/><line class="beam" x1="600" y1="400" x2="600" y2="600"/>
+        </g>
+        <rect class="post" x="36" y="596" width="8" height="8"/><rect class="post" x="236" y="596" width="8" height="8"/>
+        <rect class="post" x="436" y="596" width="8" height="8"/><rect class="post" x="636" y="596" width="8" height="8"/>
+
+        <!-- Interior floor -->
+        <rect class="room" x="40" y="40" width="600" height="360"/>
+        <rect class="zone" x="40" y="40" width="200" height="160"/>
+        <rect class="zone" x="240" y="40" width="80" height="160"/>
+        <rect class="zone" x="540" y="40" width="100" height="160"/>
+        <line class="wall-thin" x1="540" y1="120" x2="640" y2="120"/>
+        <!-- Walls -->
+        <polyline class="wall" points="80,400 40,400 40,40 640,40 640,400 600,400"/>
+        <!-- Folding glass doors -->
+        <g class="glass">
+          <polyline points="80,400 100,394 120,400 140,394 160,400 180,394 200,400 220,394 240,400 260,394 280,400 300,394 320,400 340,394 360,400 380,394"/>
+          <polyline points="448,400 468,394 488,400 508,394 528,400 548,394 568,400 588,394 600,400"/>
+        </g>
+
+        <!-- Kitchen fixtures -->
+        <rect class="furn" x="48" y="48" width="184" height="24"/>
+        <rect class="furn" x="48" y="72" width="24" height="120"/>
+        <rect class="furn" x="110" y="112" width="80" height="40"/>
+        <text class="lbl" x="110" y="176">MUTFAK</text><text class="lbl-sm" x="110" y="190">20 m²</text>
+        <text class="lbl" x="252" y="112">DEPO</text><text class="lbl-sm" x="252" y="126">soğuk oda</text>
+        <!-- Pass-through window -->
+        <line class="glass" x1="240" y1="196" x2="240" y2="200"/>
+
+        <!-- Bar -->
+        <rect class="wood" x="332" y="44" width="200" height="24"/>
+        <text class="lbl-sm" x="384" y="88">arka bar · espresso</text>
+        <rect class="counter" x="340" y="160" width="180" height="28"/>
+        <rect class="furn" x="340" y="160" width="60" height="28"/>
+        <text class="lbl-sm" x="344" y="178">vitrin</text>
+        <text class="lbl" x="440" y="150">BAR</text>
+        <circle class="seat" cx="416" cy="210" r="8"/><circle class="seat" cx="448" cy="210" r="8"/>
+        <circle class="seat" cx="480" cy="210" r="8"/><circle class="seat" cx="512" cy="210" r="8"/>
+
+        <text class="lbl" x="560" y="86">WC</text><text class="lbl-sm" x="560" y="100">K / E</text>
+        <text class="lbl" x="560" y="166">WC</text><text class="lbl-sm" x="560" y="180">engelli</text>
+
+        <!-- Banquette -->
+        <rect class="wood" x="40" y="224" width="24" height="168"/>
+        <rect class="furn" x="80" y="240" width="28" height="28"/><circle class="seat" cx="126" cy="254" r="7"/>
+        <rect class="furn" x="80" y="296" width="28" height="28"/><circle class="seat" cx="126" cy="310" r="7"/>
+        <rect class="furn" x="80" y="352" width="28" height="28"/><circle class="seat" cx="126" cy="366" r="7"/>
+
+        <!-- Two-tops -->
+        <rect class="furn" x="170" y="234" width="28" height="28"/><circle class="seat" cx="160" cy="248" r="7"/><circle class="seat" cx="208" cy="248" r="7"/>
+        <rect class="furn" x="170" y="338" width="28" height="28"/><circle class="seat" cx="160" cy="352" r="7"/><circle class="seat" cx="208" cy="352" r="7"/>
+
+        <!-- Communal table -->
+        <rect class="wood" x="260" y="280" width="160" height="40"/>
+        <circle class="seat" cx="276" cy="268" r="7"/><circle class="seat" cx="308" cy="268" r="7"/><circle class="seat" cx="340" cy="268" r="7"/><circle class="seat" cx="372" cy="268" r="7"/><circle class="seat" cx="404" cy="268" r="7"/>
+        <circle class="seat" cx="276" cy="332" r="7"/><circle class="seat" cx="308" cy="332" r="7"/><circle class="seat" cx="340" cy="332" r="7"/><circle class="seat" cx="372" cy="332" r="7"/><circle class="seat" cx="404" cy="332" r="7"/>
+
+        <!-- Round four-tops -->
+        <g>
+          <circle class="furn" cx="492" cy="272" r="18"/>
+          <circle class="seat" cx="492" cy="244" r="7"/><circle class="seat" cx="492" cy="300" r="7"/><circle class="seat" cx="464" cy="272" r="7"/><circle class="seat" cx="520" cy="272" r="7"/>
+          <circle class="furn" cx="492" cy="356" r="18"/>
+          <circle class="seat" cx="492" cy="328" r="7"/><circle class="seat" cx="492" cy="384" r="7"/><circle class="seat" cx="464" cy="356" r="7"/><circle class="seat" cx="520" cy="356" r="7"/>
+          <circle class="furn" cx="584" cy="300" r="18"/>
+          <circle class="seat" cx="584" cy="272" r="7"/><circle class="seat" cx="584" cy="328" r="7"/><circle class="seat" cx="556" cy="300" r="7"/><circle class="seat" cx="612" cy="300" r="7"/>
+        </g>
+
+        <!-- Veranda furniture -->
+        <circle class="canopy" cx="76" cy="508" r="28"/><circle class="planter" cx="76" cy="508" r="10"/>
+        <g>
+          <rect class="furn" x="120" y="456" width="32" height="32"/>
+          <circle class="seat" cx="136" cy="446" r="7"/><circle class="seat" cx="136" cy="498" r="7"/><circle class="seat" cx="110" cy="472" r="7"/><circle class="seat" cx="162" cy="472" r="7"/>
+          <rect class="furn" x="224" y="456" width="32" height="32"/>
+          <circle class="seat" cx="240" cy="446" r="7"/><circle class="seat" cx="240" cy="498" r="7"/><circle class="seat" cx="214" cy="472" r="7"/><circle class="seat" cx="266" cy="472" r="7"/>
+          <rect class="furn" x="328" y="456" width="32" height="32"/>
+          <circle class="seat" cx="344" cy="446" r="7"/><circle class="seat" cx="344" cy="498" r="7"/><circle class="seat" cx="318" cy="472" r="7"/><circle class="seat" cx="370" cy="472" r="7"/>
+          <rect class="furn" x="120" y="528" width="32" height="32"/>
+          <circle class="seat" cx="136" cy="518" r="7"/><circle class="seat" cx="136" cy="570" r="7"/><circle class="seat" cx="110" cy="544" r="7"/><circle class="seat" cx="162" cy="544" r="7"/>
+          <rect class="furn" x="224" y="528" width="32" height="32"/>
+          <circle class="seat" cx="240" cy="518" r="7"/><circle class="seat" cx="240" cy="570" r="7"/><circle class="seat" cx="214" cy="544" r="7"/><circle class="seat" cx="266" cy="544" r="7"/>
+          <rect class="furn" x="328" y="528" width="32" height="32"/>
+          <circle class="seat" cx="344" cy="518" r="7"/><circle class="seat" cx="344" cy="570" r="7"/><circle class="seat" cx="318" cy="544" r="7"/><circle class="seat" cx="370" cy="544" r="7"/>
+        </g>
+        <!-- Lounge -->
+        <rect class="wood" x="600" y="440" width="28" height="112"/>
+        <rect class="wood" x="472" y="456" width="32" height="32"/>
+        <rect class="wood" x="472" y="520" width="32" height="32"/>
+        <circle class="furn" cx="548" cy="504" r="20"/>
+        <text class="lbl-sm" x="508" y="432">lounge</text>
+
+        <!-- Planters & entry -->
+        <rect class="planter" x="40" y="584" width="344" height="16"/>
+        <rect class="planter" x="448" y="584" width="192" height="16"/>
+        <path class="dim" d="M416 640 L416 606 M408 616 L416 606 L424 616"/>
+        <text class="lbl" x="386" y="655">GİRİŞ</text>
+        <text class="lbl-sm" x="386" y="424">yürüyüş yolu</text>
+
+        <!-- Zone keys -->
+        <circle class="key" cx="300" cy="590" r="0"/>
+        <g>
+          <circle class="key" cx="60" cy="430" r="10"/><text class="key-t" x="56" y="434">A</text>
+          <circle class="key" cx="236" cy="380" r="10"/><text class="key-t" x="232" y="384">B</text>
+          <circle class="key" cx="530" cy="142" r="10"/><text class="key-t" x="526" y="146">C</text>
+          <circle class="key" cx="88" cy="224" r="10"/><text class="key-t" x="84" y="228">D</text>
+          <circle class="key" cx="340" cy="240" r="10"/><text class="key-t" x="336" y="244">E</text>
+          <circle class="key" cx="620" cy="430" r="10"/><text class="key-t" x="616" y="434">F</text>
+        </g>
+
+        <!-- Dimensions -->
+        <path class="dim" d="M40 22 L640 22 M40 16 L40 28 M640 16 L640 28"/>
+        <text class="lbl-sm" x="320" y="16">15,00 m</text>
+        <path class="dim" d="M20 40 L20 600 M14 40 L26 40 M14 400 L26 400 M14 600 L26 600"/>
+        <text class="lbl-sm" x="4" y="224" transform="rotate(-90 12 224)">9,00 m</text>
+        <text class="lbl-sm" x="4" y="504" transform="rotate(-90 12 504)">5,00 m</text>
+        <!-- Scale bar -->
+        <rect class="furn" x="540" y="632" width="40" height="6"/><rect class="post" x="580" y="632" width="40" height="6"/>
+        <text class="lbl-sm" x="540" y="652">0</text><text class="lbl-sm" x="574" y="652">1</text><text class="lbl-sm" x="612" y="652">2 m</text>
+      </svg>
+    </div>
+    <div class="plan-legend">
+      <span><i style="background: var(--plan-veranda)"></i>Veranda, pergola altı</span>
+      <span><i style="background: var(--rattan); opacity: .6"></i>Masif ahşap / hasır</span>
+      <span><i style="background: var(--aegean); opacity: .4"></i>Bar tezgâhı (çini cephe)</span>
+      <span><i style="background: var(--sage); opacity: .6"></i>Bitki saksıları</span>
+      <span><i style="border-color: var(--aegean); border-width: 2px"></i>Katlanır cam kapı</span>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Bölgeler</div>
+      <h2>Altı bölge, altı ruh hâli</h2>
+    </div>
+    <div class="zones">
+      <article class="zone-card">
+        <header><span class="k">A</span><h3>Veranda</h3></header>
+        <div class="meta">75 m² · 29 kişi</div>
+        <p>Çelik pergola üzerinde ahşap çıtalar ve asma. Kışın şeffaf rüzgârlık paneller ve infrared ısıtıcılarla dört mevsim kullanılır.</p>
+        <ul>
+          <li>Zemin: dökme terrazzo, iç salonla aynı kot</li>
+          <li>6 adet 80×80 cm masa, hasır sırtlı sandalye</li>
+          <li>Saksıda yaşlı zeytin ağacı, odak noktası</li>
+        </ul>
+      </article>
+      <article class="zone-card">
+        <header><span class="k">B</span><h3>Katlanır cam cephe</h3></header>
+        <div class="meta">13 m · 12 kanat</div>
+        <p>İnce profilli siyah alüminyum doğramalı katlanır sistem. Orta kanat sabit kapı olarak çalışır, diğerleri iki yana toplanır.</p>
+        <ul>
+          <li>Isı yalıtımlı cam, Low-E kaplama</li>
+          <li>Eşiksiz alt ray, zemine gömülü</li>
+          <li>Üstte keten stor perde kutusu</li>
+        </ul>
+      </article>
+      <article class="zone-card">
+        <header><span class="k">C</span><h3>Bar ve kahve tezgâhı</h3></header>
+        <div class="meta">4,5 m tezgâh · 4 tabure</div>
+        <p>Mekânın kalbi. Tezgâh cephesi Ege mavisi el yapımı çini, üstü honlanmış Marmara mermeri. Sol uçta pastane vitrini.</p>
+        <ul>
+          <li>Arka bar: zeytin ağacı raf, pirinç ray</li>
+          <li>Tezgâh üstü 3 adet opal cam sarkıt</li>
+          <li>Mutfak servis penceresine 4 m mesafe</li>
+        </ul>
+      </article>
+      <article class="zone-card">
+        <header><span class="k">D</span><h3>Sedir banket</h3></header>
+        <div class="meta">4,2 m · 6 kişi</div>
+        <p>Pencere boyunca yerinde yapılmış ahşap sedir. Keten minderler ve kilim desenli yastıklar; altında kapaklı depolama.</p>
+        <ul>
+          <li>Oturma yüksekliği 45 cm, derinlik 55 cm</li>
+          <li>Duvarda kireç sıva üzerine aplik</li>
+        </ul>
+      </article>
+      <article class="zone-card">
+        <header><span class="k">E</span><h3>Ortak masa</h3></header>
+        <div class="meta">400×100 cm · 10 kişi</div>
+        <p>Tek parça masif meşe masa. Sabah laptop ile çalışanlara, akşam kalabalık gruplara hizmet eder. Altında priz ve USB kanalı.</p>
+        <ul>
+          <li>Üstünde 4 adet hasır abajurlu sarkıt</li>
+          <li>Sırtsız ahşap tabureler</li>
+        </ul>
+      </article>
+      <article class="zone-card">
+        <header><span class="k">F</span><h3>Lounge köşesi</h3></header>
+        <div class="meta">12 m² · 5 kişi</div>
+        <p>Verandanın sağ ucunda alçak rattan kanepe, iki berjer ve yuvarlak traverten sehpa. Akşam şarap ve meze için yavaş tempolu köşe.</p>
+        <ul>
+          <li>Dış mekân kumaşı, yağ yeşili ve ham keten</li>
+          <li>Zeminde jüt kilim</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Malzeme ve renk paleti</div>
+      <h2>Dokunulan yüzeyler</h2>
+      <p>Renkler doğrudan malzemeden geliyor. Boya ile verilen tek renk, bar tezgâhındaki çini mavisi.</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background: #E9E6DC"></div>
+        <b>Kireç sıva</b>
+        <small>Duvarlar, mat ve hafif dalgalı perdah</small>
+        <span class="mono">Tüm iç duvarlar</span>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: linear-gradient(135deg, #CFC6B4 0%, #D9D2C3 40%, #B9AE98 41%, #D6CEBE 60%, #A79C86 61%, #D2CAB9 100%)"></div>
+        <b>Dökme terrazzo</b>
+        <small>Mermer kırıklı, açık gri zemin; içeride ve verandada kesintisiz</small>
+        <span class="mono">210 m²</span>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: #2E5F78"></div>
+        <b>El yapımı çini</b>
+        <small>7,5×15 cm sırlı karo, Ege mavisi, düzensiz ton</small>
+        <span class="mono">Bar cephesi, WC</span>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: #8A6A3E"></div>
+        <b>Zeytin ağacı / meşe</b>
+        <small>Yağ cilalı masif ahşap, belirgin damar</small>
+        <span class="mono">Ortak masa, sedir, raflar</span>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: repeating-linear-gradient(45deg, #C49A5A 0 4px, #B0874A 4px 8px)"></div>
+        <b>Hasır ve rattan</b>
+        <small>Sandalye sırtları, abajurlar, lounge mobilyası</small>
+        <span class="mono">Veranda ağırlıklı</span>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: #E8E4DA"></div>
+        <b>Honlanmış mermer</b>
+        <small>Marmara beyazı, bar tezgâhı ve bistro masa üstleri</small>
+        <span class="mono">3 cm kalınlık</span>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: #5D6F4F"></div>
+        <b>Yağ yeşili keten</b>
+        <small>Minderler, stor perdeler, garson önlükleri</small>
+        <span class="mono">Tekstil</span>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: linear-gradient(135deg, #B8914F, #D9B87A 50%, #9E7A3C)"></div>
+        <b>Fırçalanmış pirinç</b>
+        <small>Musluklar, ray, kapı kolları; cilasız, zamanla kararır</small>
+        <span class="mono">Aksesuar</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Aydınlatma</div>
+      <h2>İki sahne: sabah kafe, akşam bistro</h2>
+      <p>Tüm armatürler 2700 K ve altı, CRI 90+. Akşam sahnesinde genel aydınlatma kapanır, yalnızca masa ve duvar ışıkları kalır.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Katman</th><th>Armatür</th><th>Renk sıcaklığı</th><th>Sabah</th><th>Akşam</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Genel</td><td>Tavanda gizli lineer LED, kireç sıva bant içinde</td><td class="num">2700 K</td><td class="num">300 lx</td><td class="num">kapalı</td></tr>
+          <tr><td>Bar</td><td>Opal cam sarkıt × 3, tezgâh üstü 75 cm</td><td class="num">2700 K</td><td class="num">500 lx</td><td class="num">250 lx</td></tr>
+          <tr><td>Masa</td><td>Hasır abajurlu sarkıt × 4, ortak masa üstü</td><td class="num">2400 K</td><td class="num">200 lx</td><td class="num">120 lx</td></tr>
+          <tr><td>Duvar</td><td>Pirinç aplik, sedir boyunca × 3</td><td class="num">2200 K</td><td class="num">kapalı</td><td class="num">%40</td></tr>
+          <tr><td>Veranda</td><td>Pergola boyunca festoon ampul dizisi, 24 m</td><td class="num">2200 K</td><td class="num">kapalı</td><td class="num">%60</td></tr>
+          <tr><td>Masa üstü</td><td>Şarjlı taşınabilir masa lambası × 12</td><td class="num">2200 K</td><td class="num">kapalı</td><td class="num">açık</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Mobilya listesi</div>
+      <h2>Oturma kapasitesi</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Kod</th><th>Öğe</th><th>Ölçü</th><th>Adet</th><th>Kişi</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="num">A</td><td>Veranda masası, mermer üst, döküm ayak + hasır sırtlı sandalye</td><td class="num">80×80 cm</td><td class="num">6</td><td class="num">24</td></tr>
+          <tr><td class="num">B</td><td>İç salon yuvarlak masa + bistro sandalye</td><td class="num">Ø 90 cm</td><td class="num">3</td><td class="num">12</td></tr>
+          <tr><td class="num">C</td><td>Bar taburesi, ahşap oturak, pirinç ayaklık</td><td class="num">h 75 cm</td><td class="num">4</td><td class="num">4</td></tr>
+          <tr><td class="num">D</td><td>Sedir banket masası (sedir + karşı sandalye)</td><td class="num">70×70 cm</td><td class="num">3</td><td class="num">6</td></tr>
+          <tr><td class="num">D</td><td>İkili masa, salon ortası</td><td class="num">70×70 cm</td><td class="num">2</td><td class="num">4</td></tr>
+          <tr><td class="num">E</td><td>Ortak masa, masif meşe + tabure</td><td class="num">400×100 cm</td><td class="num">1</td><td class="num">10</td></tr>
+          <tr><td class="num">F</td><td>Rattan kanepe (3 kişilik) + berjer × 2 + traverten sehpa</td><td class="num">Ø 100 cm sehpa</td><td class="num">1 set</td><td class="num">5</td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td></td><td>Toplam</td><td></td><td></td><td class="num">65</td></tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+
+  <section class="split">
+    <div style="display: grid; gap: 20px; align-content: start;">
+      <div class="section-head">
+        <div class="eyebrow">Bitkilendirme</div>
+        <h2>Yeşil katmanlar</h2>
+      </div>
+      <ul class="plants">
+        <li><b>Zeytin ağacı (Olea europaea)</b><span>Verandada tek büyük saksı, 2,5 m. Mekânın imzası.</span></li>
+        <li><b>Asma ve begonvil</b><span>Pergola direklerinden tırmanır; yazın doğal gölge.</span></li>
+        <li><b>Lavanta, biberiye, kekik</b><span>Veranda önü saksı bandında. Mutfakta da kullanılır.</span></li>
+        <li><b>Pothos ve sarmaşık</b><span>İçeride arka bar rafından sarkar, bahçeyi içeri bağlar.</span></li>
+      </ul>
+    </div>
+    <div style="display: grid; gap: 20px; align-content: start;">
+      <div class="section-head">
+        <div class="eyebrow">Uygulama sırası</div>
+        <h2>Şantiye adımları</h2>
+      </div>
+      <ol class="steps">
+        <li>Altyapı<span>Mutfak tesisatı, havalandırma, bar altı drenaj ve ortak masa priz kanalı.</span></li>
+        <li>Cephe ve pergola<span>Katlanır cam sistem, çelik pergola, gömme ray.</span></li>
+        <li>Zemin<span>Terrazzo dökümü, içeride ve verandada tek seferde; derz yok.</span></li>
+        <li>Duvar ve çini<span>Kireç sıva perdahı, bar cephesi ve WC çini kaplaması.</span></li>
+        <li>Yerinde imalat<span>Sedir, arka bar, bar tezgâhı ve mermer üstler.</span></li>
+        <li>Aydınlatma ve mobilya<span>Armatür montajı, sahne programlama, mobilya ve bitkiler.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    Konsept tasarım föyü. Ölçüler ön projedir; uygulama öncesinde mekânda rölöve alınarak teyit edilmelidir.
+  </footer>
+</div>
